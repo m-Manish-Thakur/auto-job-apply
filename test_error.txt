@@ -1,4 +1,0 @@
-# github.com/manish/job-auto-apply/internal/form [github.com/manish/job-auto-apply/internal/form.test]
-internal\form\form_filler.go:118:13: assignment mismatch: 1 variable but sel.SelectOption returns 2 values
-FAIL	github.com/manish/job-auto-apply/internal/form [build failed]
-FAIL

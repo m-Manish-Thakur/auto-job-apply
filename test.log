@@ -1,4 +1,0 @@
-=== RUN   TestResolveFieldKey
---- PASS: TestResolveFieldKey (0.00s)
-PASS
-ok  	github.com/manish/job-auto-apply/internal/form	0.438s
