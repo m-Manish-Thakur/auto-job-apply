@@ -1,0 +1,19 @@
+# Credentials — never commit
+.env
+
+# Compiled binary
+job-auto-apply
+job-auto-apply.exe
+
+# SQLite database
+data/
+
+# Playwright browser cache
+.local-chromium/
+
+# Go build cache
+vendor/
+
+# IDE
+.vscode/
+.idea/

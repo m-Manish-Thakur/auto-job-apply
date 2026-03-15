@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  # ── Local LLM (Ollama with Llama3) ─────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # Pull the llama3 model on first start
+    entrypoint: >
+      sh -c "ollama serve &
+             sleep 5 &&
+             ollama pull llama3 &&
+             wait"
+    restart: unless-stopped
+
+  # ── Job Auto Apply Bot ──────────────────────────────────────────────────────
+  bot:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: job-auto-apply-bot
+    depends_on:
+      - ollama
+    environment:
+      - NAUKRI_EMAIL=${NAUKRI_EMAIL}
+      - NAUKRI_PASSWORD=${NAUKRI_PASSWORD}
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3}
+      - DB_PATH=/app/data/jobs.db
+      - HEADLESS=true
+    volumes:
+      # Persist SQLite database between runs
+      - ./data:/app/data
+      # Mount your resume so you can update it without rebuilding the image
+      - ./resume:/app/resume:ro
+      # Mount configs so you can edit profile.yaml without rebuilding
+      - ./configs:/app/configs:ro
+    restart: "no"  # Run once and exit — use cron or manual trigger for scheduling
+
+volumes:
+  ollama_data:
